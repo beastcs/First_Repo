@@ -1,0 +1,183 @@
+CREATE TABLE department (department_id integer,department_name varchar2(20) not null,constraint dept_pk PRIMARY KEY(department_id));
+ 
+CREATE TABLE role (role_id integer,role varchar2(20) not null,constraint role_pk PRIMARY KEY(role_id));
+ 
+CREATE TABLE user_tab (
+    username VARCHAR2(20) NOT NULL,
+    name VARCHAR2(50) NOT NULL,
+    password VARCHAR2(20) NOT NULL,
+    employee_id NUMBER NOT NULL,
+    email VARCHAR2(50) NOT NULL UNIQUE,
+    department_id INTEGER NOT NULL,
+    role_id INTEGER NOT NULL,
+    CONSTRAINT user_tab_pk PRIMARY KEY (username),
+    CONSTRAINT user_tab_fk_dept FOREIGN KEY (department_id) REFERENCES department(department_id),
+    CONSTRAINT user_tab_fk_role FOREIGN KEY (role_id) REFERENCES role(role_id)
+);
+ 
+ 
+CREATE TABLE payment_db (
+    invoice_number INT PRIMARY KEY,
+    creator_username VARCHAR(20),
+    invoice_date DATE,
+    invoice_amount number(12,2),
+    approval_status VARCHAR(1),
+    approved_rejected_date DATE,
+    approved_rejected_username varchar(20)
+);
+ 
+ 
+ 
+CREATE TABLE purchase_order_table (
+    purchase_order_number int primary key
+);
+ 
+
+CREATE TABLE inbound_product (
+    product_code INT,
+    name VARCHAR2(50) NOT NULL,
+    current_stock NUMBER(4) NOT NULL,
+    length INTEGER NOT NULL,
+    width INTEGER NOT NULL,
+    height INTEGER NOT NULL,
+    weight INTEGER NOT NULL,
+    CONSTRAINT inbound_product_pk PRIMARY KEY (product_code)
+);
+
+CREATE TABLE location(
+location_id INTEGER CONSTRAINT location_pk PRIMARY KEY,
+location_description VARCHAR2(30) NOT NULL,
+status_code INTEGER NOT NULL,
+location_length INTEGER NOT NULL,
+location_width INTEGER NOT NULL,
+location_height INTEGER NOT NULL
+);
+ 
+CREATE TABLE in_ledger_location(
+ledger_id INTEGER NOT NULL,
+location_id INTEGER NOT NULL
+);
+ 
+
+
+CREATE TABLE in_ledger(
+ledger_id INTEGER CONSTRAINT in_ledger_pk PRIMARY KEY,
+in_date DATE NOT NULL,
+username VARCHAR2(20) NOT NULL,
+product_code INTEGER,
+batch_number VARCHAR2(100) NOT NULL,
+quantity INTEGER NOT NULL,
+supplier_name VARCHAR2(100) NOT NULL,
+supplier_location VARCHAR2(100) NOT NULL,
+POnumber VARCHAR2(30) NOT NULL,
+PODate DATE NOT NULL
+);
+ 
+
+
+CREATE TABLE stage (stage_ref_no number);
+ 
+
+CREATE TABLE blanking (
+    blanking_stage_ref_no INTEGER,
+    lubrication_condition CHAR(50),
+    sheet_metal_strength FLOAT,
+    tool_geometry_die FLOAT,
+    tool_geometry_punch FLOAT,
+    punch_pressure FLOAT,
+    punch_speed FLOAT,
+    FOREIGN KEY (blanking_stage_ref_no) REFERENCES stage(stage_ref_no)
+);
+ 
+ 
+
+CREATE TABLE assembling (
+    assembling_stage_ref_no INTEGER ,
+    transmission_assembly CHAR(5),
+    suspension_assembly CHAR(5),
+    break_assembly CHAR(5),
+    electrical_assembly CHAR(5),
+    body_assembly CHAR(5),
+    interior_assembly CHAR(5),
+    engine_assembly CHAR(5),
+    FOREIGN KEY (assembling_stage_ref_no) REFERENCES stage(stage_ref_no)
+);
+ 
+
+CREATE TABLE painting (
+    painting_stage_ref_no INTEGER ,
+    body_wash CHAR(5),
+    sanding CHAR(5),
+    primer CHAR(5),
+    base_coat CHAR(5),
+    clear_coat CHAR(5),
+    FOREIGN KEY (painting_stage_ref_no) REFERENCES stage(stage_ref_no)
+);
+
+
+CREATE TABLE stamping (
+    stamping_stage_ref_no INTEGER,
+    material_grade FLOAT,
+    sheet_metal_strength FLOAT,
+    tool_geometry_die FLOAT,
+    tool_geometry_punch FLOAT,
+    punch_pressure FLOAT,
+    spring_back FLOAT,
+    blank_holding_force FLOAT,
+    punch_speed FLOAT,
+    lubrication_condition CHAR(30),
+    FOREIGN KEY (stamping_stage_ref_no) REFERENCES stage(stage_ref_no)
+);
+ 
+
+CREATE TABLE welding (
+    welding_stage_ref_no INTEGER,
+    mig_current FLOAT,
+    tig_current FLOAT,
+    welding_voltage FLOAT,
+    mig_temperature FLOAT,
+    tig_temperature FLOAT,
+    gas_tungsten_travel_angle FLOAT,
+    flux_cored_travel_angle FLOAT,
+    submerged_travel_angle FLOAT,
+    FOREIGN KEY (welding_stage_ref_no) REFERENCES stage(stage_ref_no)
+);
+ 
+CREATE TABLE QualityAssurance (
+    StageRefNo INT NOT NULL,
+    SampleSize INT NOT NULL,
+    QAMet CHAR(1),  -- Assuming "QAMet" is a single character
+    TypeOfDefects VARCHAR(500) DEFAULT NULL,
+    Remarks VARCHAR(200) DEFAULT NULL,
+    FOREIGN KEY (StageRefNo) REFERENCES Stage(StageRefNo)
+);
+
+create table item_type(
+item_code varchar(10) not null constraints item_code_primary_key primary key,
+description varchar(20) not null,
+unitOfMeasure varchar(20) not null,
+category varchar(20) not null,
+dimensions varchar(20) not null, 
+manufacturer varchar(20) not null,
+countryOrigin varchar(20) not null
+);
+ 
+    CREATE TABLE BOM (    
+BOM_CODE        VARCHAR2(20) NOT NULL constraints pk_bom_code primary key,    
+ITEM_CODE       VARCHAR2(10) NOT NULL,    
+QUANTITY        NUMBER(20) NOT NULL,    
+SUB_ASSEMBLY    NUMBER(20) NOT NULL,    
+NOTES_COMMENTS  VARCHAR2(20) NOT NULL,    
+CONSTRAINT fk_item_code_bom FOREIGN KEY (ITEM_CODE) REFERENCES item_type (ITEM_CODE)
+);
+
+CREATE TABLE inventory_requisition (    
+ inventory_request_id INT not null constraints id_primary_key primary key,    requester_department_id INT,    
+ request_date DATE,    
+ quantity INT,    
+ purpose VARCHAR(25),    
+ notes_comments VARCHAR(25),    
+ approval_status CHAR(1),    
+ ITEM_CODE VARCHAR2(10),     
+ CONSTRAINT fk_item_code FOREIGN KEY (ITEM_CODE) REFERENCES item_type (ITEM_CODE)
+);
