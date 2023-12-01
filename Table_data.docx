@@ -1,0 +1,32 @@
+ALTER TABLE role ADD dept_id INTEGER add CONSTRAINT fk_role_dept FOREIGN KEY (dept_id) REFERENCES department(department_id);
+
+alter table department
+modify department_name varchar(200);
+
+alter table role
+modify role varchar(100);
+
+-- Insert into department
+INSERT INTO department VALUES(101, 'Production Department');
+INSERT INTO department VALUES(102, 'Inventory/Store Manager');
+INSERT INTO department VALUES(103, 'Purchasing Department');
+INSERT INTO department VALUES(104, 'Accounts Department');
+INSERT INTO department VALUES(105, 'Suppliers');
+ 
+-- Insert into role
+INSERT INTO role VALUES(1011, 'Planning Production Schedules', 101);
+INSERT INTO role VALUES(1012, 'Estimating Raw Material Requirements', 101);
+INSERT INTO role VALUES(1013, 'Coordinating With Inventory Manager For Timely Material Availability', 101);
+INSERT INTO role VALUES(1014, 'Updating Inventory Records For Used Items', 101);
+INSERT INTO role VALUES(1015, 'Ensuring Inventory Availability To Meet Production Demands', 101);
+ 
+INSERT INTO role VALUES(1021, 'Focuses On Maintaining Accurate Inventory Records', 102);
+INSERT INTO role VALUES(1022, 'Tracking Stock Levels', 102);
+INSERT INTO role VALUES(1023, 'Optimizing Inventory Turnover', 102);
+ 
+INSERT INTO role VALUES(1031, 'The Purchasing Team Is Responsible For Sourcing Raw Materials', 103);
+INSERT INTO role VALUES(1032, 'The Purchasing Team Is Responsible For Sourcing Components', 103);
+INSERT INTO role VALUES(1033, 'Supplies Necessary For Production', 103);
+ 
+INSERT INTO role VALUES(1051, 'Responsible for fulfilling the purchase orders placed by the organization', 105);
+INSERT INTO role VALUES(1052, 'Ensuring the timely delivery of the materials', 105);
