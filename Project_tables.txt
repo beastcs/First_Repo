@@ -9,10 +9,8 @@ CREATE TABLE user_tab (
     employee_id NUMBER NOT NULL,
     email VARCHAR2(50) NOT NULL UNIQUE,
     department_id INTEGER NOT NULL,
-    role_id INTEGER NOT NULL,
     CONSTRAINT user_tab_pk PRIMARY KEY (username),
     CONSTRAINT user_tab_fk_dept FOREIGN KEY (department_id) REFERENCES department(department_id),
-    CONSTRAINT user_tab_fk_role FOREIGN KEY (role_id) REFERENCES role(role_id)
 );
  
  
